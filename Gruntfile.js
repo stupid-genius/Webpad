@@ -26,6 +26,8 @@ module.exports = function (grunt) {
         files: [
           'bin/www',
           'app.js',
+          'check-authentication.js',
+          'config.js',
           'routes/*.js'
         ],
         tasks: ['develop', 'delayed-livereload']
