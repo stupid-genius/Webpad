@@ -1,5 +1,4 @@
 var logger = require('winston');
-var util = require('util');
 
 module.exports = function(req, res, next){
 	logger.log('info', 'update on db: %s, collection: %s', req.params[0], req.params[1]);
