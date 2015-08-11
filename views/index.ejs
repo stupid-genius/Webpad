@@ -1,20 +1,33 @@
 <% include header %>
 
-<h1>MongoCRUD</h1>
-<h3>To use the MongoCRUD UI:</h3>
-<ul>
-    <li>GET /crud/{db}/{collection}</li>
-</ul>
-<h3>To use the MongoCRUD API:</h3>
-<ul>
-    <li>POST to /[crud]/{db}/{collection}</li>
-    <li>include JSON document in the body</li>
-    <li>set request headers<br />
-        <ul>
-            <li>Content-Type: application/json</li>
-            <li>Authorization: Basic &lt;token&gt;</li>
-        </ul>
-    </li>
-</ul>
+    <div id="header">
+        <h2><%= header_title %></h2>
+    </div>
+<% if(isDir){ %>
+    <div id="tree" ng-controller="<%= controller %>">
+    	<script type="text/ng-template" id="nodes_renderer.html">
+    		<div ui-tree-handle>
+    		<a class="glyphicon" ng-class="{'ui-icon ui-icon-plus': collapsed, 'ui-icon ui-icon-minus': !collapsed}" href="" ng-show="dir.items.length!=0" ng-click="expandRow(this)"></a>
+    		<span style="width:16px;display:inline-block;" ng-show="dir.items.length==0"></span>
+    		<a href="{{dir.link}}">
+    			{{dir.title}}
+    		</a>
+    		<a class="ui-icon ui-icon-trash" href="" ng-show="dir.items.length==0" ng-click="deleteRow(this)"></a>
+    		</div>
+    		<ol ui-tree-nodes="options" ng-model="dir.items" ng-class="{hidden: collapsed}">
+    			<li ng-repeat="dir in dir.items" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+    		</ol>
+    	</script>
+    	<div id="directoryTree" ui-tree="options" data-drag-enabled="false">
+    		<ol ui-tree-nodes ng-model="dirList">
+    			<li ng-repeat="dir in dirList" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+    		</ol>
+    	</div>
+    </div>
+<% }else{ %>
+    <div id="main" ng-controller="<%= controller %>">
+        <textarea name="textareaname" class="fullscreen" ng-model="wpDoc" ng-keydown="onKeyDown($event)"></textarea>
+    </div>
+<% } %>
 
 <% include footer %>

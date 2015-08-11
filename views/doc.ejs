@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title><%= page_title %></title>
+	<link href="<%= host %>/css/angular-ui-tree.min.css" rel="stylesheet">
+	<link href="<%= host %>/css/style.css" rel="stylesheet">
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.3/angular.min.js"></script>
+	<script type="text/javascript" src="<%= host %>/js/angular-ui-tree.min.js"></script>
+	<script type="text/javascript" src="<%= host %>/js/webpadApp.js"></script>
+	<script type="text/javascript">
+		$('document').ready(function()
+		{
+			$('.fullscreen').height($(window).height()-$('#header').height());
+			$('.fullscreen').width($(window).width());
+		});
+	</script>
+</head>
+<body ng-app="webpadApp">
+	<div id="header">
+		<h2><%= header_title %></h2>
+	</div>
+	<div id="main" ng-controller="<%= controller %>">
+		<textarea name="textareaname" class="fullscreen" ng-model="wpDoc" ng-keydown="onKeyDown($event)"></textarea>
+	</div>
+</body>
+</html>

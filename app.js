@@ -6,6 +6,7 @@ var logger = require('winston');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var config = require('./config');
 var routes = require('./routes/index');
 //var users = require('./routes/user');
 
@@ -48,9 +49,11 @@ if (app.get('env') === 'development') {
     app.use(function(err, req, res, next) {
         res.status(err.status || 500);
         res.render('error', {
+            host: config.public_root,
             message: err.message,
             error: err,
-            title: 'error'
+            page_title: 'error',
+            initElem: null
         });
     });
 }
@@ -60,9 +63,11 @@ if (app.get('env') === 'development') {
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
+        host: config.public_root,
         message: err.message,
         error: {},
-        title: 'error'
+        page_title: 'error',
+        initElem: null
     });
 });
 

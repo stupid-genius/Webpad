@@ -2,11 +2,11 @@ var express = require('express');
 var router = express.Router();
 var authCheck = require('./check-authentication');
 
-/* GET home page. */
 router.get('/', function(req, res){
-    res.render('index', { title: 'MongoCRUD' });
+	res.redirect('/doc/');
 });
-router.use('/crud', require('./crud'));
+router.use('/doc', require('./doc'));
+router.use('/txt', require('./txt'));
 
 router.post(/\/c\/(\w+)\/(\w+)$/, authCheck, require('./create'));
 router.post(/\/r\/(\w+)\/(\w+)$/, authCheck, require('./read'));

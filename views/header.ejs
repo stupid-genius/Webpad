@@ -1,12 +1,24 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width">
-  <title><%-title %></title>
-  <link rel="stylesheet" href="/css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title><%= page_title %></title>
+    <link rel="stylesheet" href="<%= host %>/css/style.css">
+    <link rel="stylesheet" href="<%= host %>/css/angular-ui-tree.min.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.3/angular.min.js"></script>
+    <script type="text/javascript" src="<%= host %>/js/angular-ui-tree.min.js"></script>
+    <script type="text/javascript" src="<%= host %>/js/webpadApp.js"></script>
   <% if (ENV_DEVELOPMENT) { %>
     <script src="http://localhost:35729/livereload.js"></script>
   <% } %>
+    <script type="text/javascript">
+        $('document').ready(function()
+        {
+            $('<%= initElem %>').height($(window).height()-$('#header').height());
+            $('<%= initElem %>').width($(window).width());
+        });
+    </script>
 </head>
-<body>
+<body ng-app="webpadApp">
