@@ -8,9 +8,11 @@ router.get('/', function(req, res){
 		host: config.public_root,
 		page_title: 'WebPad',
 		header_title: 'WebPad',
-		controller: 'WebPadController'
+		controller: 'WebPadController',
+		initElem: '.fullscreen',
+		isDir: false
 	};
-	res.render('doc', context);
+	res.render('index', context);
 });
 router.get(/\/(\w+(?:\/\w+)*(?:\/)?)$/, function(req, res){
 	logger.log('debug', req.params[0]);

@@ -3,16 +3,16 @@ var router = express.Router();
 var config = require('../config');
 var http = require('http');
 var logger = require('winston');
+var stringf = require('util').format;
 
 router.get('/', function(req, res){
-	res.send('Welcome to WebPad.  Append a path to the current URL and press ALT+S to save this doc at that address.');
+	res.send('Welcome to WebPad.  Append a path to the current URL and press CTRL+S to save this doc at that address.');
 });
 router.get(/\/(\w+(?:\/\w+)*(?:\/)?)$/, function(req, res){
 	logger.log('debug', req.params[0]);
 	var isDir = false;
 	var selector = {};
 	if(req.params[0].match(/\/$/)){
-		//selector.name = new RegExp(req.params[0].replace(/\/$/, '/.+'));
 		selector.name = {
 			$regex: req.params[0].replace(/\/$/, '/.+')
 		};
@@ -131,42 +131,54 @@ router.delete(/\/(\w+(?:\/\w+)*(?:\/)?)$/, function(req, res){
 module.exports = router;
 
 function buildDirTree(list){
+	// in case dir and doc exist, link to doc
+	logger.log('info', list);
+	var link_base = config.public_root+'/doc';
 	var dirList = [];
-	function FSObject(id, title, link)
-	{
-		this.id = id;
-		this.title = title;
-		this.link = link;
-		this.items = [];
-	}
-	var count = 1;
 
-	for(var i in list)
-	{
+	for(var i in list){
 		var dirPath = list[i].split(/\//);
+		logger.log('debug', dirPath);
 		var rootDir = dirPath.shift();
-		if(dirList.length===0)
-			dirList.push(new FSObject(1, rootDir, ''));
-		var root = dirList[0];
-		var base = '';
+		if(dirList[rootDir]===undefined){
+			dirList[rootDir] = {
+				title: rootDir,
+				link: stringf('%s/%s/',link_base, rootDir),
+				items: []
+			};
+		}
+		var root = dirList[rootDir];
+		var path = rootDir;
 		outer:
-		for(var d in dirPath)
-		{
-			for(var j in root.items)
-			{
-				if(root.items[j].title==dirPath[d])
-				{
+		for(var d=0;d<dirPath.length;++d){
+			logger.log('debug', 'root: %s, path: %s, dirPath: %s', root.link, path, dirPath[d]);
+			path += '/'+dirPath[d];
+			for(var j in root.items){
+				if(root.items[j].title===dirPath[d]){
 					root = root.items[j];
+					logger.log('debug', 'dir exists; continue at %s', root.link);
 					continue outer;
 				}
 			}
-			base += dirPath[d];
-			if(!list[i].match(new RegExp(dirPath[d]+'$')))
-				base += '/';
-			var dir = new FSObject(count++, dirPath[d], base);
+			var dir = {
+				title: dirPath[d],
+				link: stringf('%s/%s',link_base, path),
+				items: []
+			};
+			if(!list[i].match(new RegExp(dirPath[d]+'$'))){
+				dir.link += '/';
+				logger.log('debug', 'list: %s, dirPath: %s, link: %s', list[i], dirPath[d], dir.link);
+			}
 			root.items.push(dir);
+			logger.log('debug', 'root.items: ', require('util').inspect(root.items, { depth: null }));
 			root = dir;
 		}
 	}
+	var i=0;
+	for(var r in dirList){
+		dirList[i++] = dirList[r];
+		delete dirList[r];
+	}
+	logger.log('info', require('util').inspect(dirList, { depth: null }));
 	return dirList;
 }

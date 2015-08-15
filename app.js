@@ -71,5 +71,7 @@ app.use(function(err, req, res, next) {
     });
 });
 
-logger.level = 'debug';
+logger.add(logger.transports.File, {level:'warn', filename: 'webpad.log'})
+logger.remove(logger.transports.Console);
+//logger.level = 'warn';
 module.exports = app;

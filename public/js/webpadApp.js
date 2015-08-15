@@ -14,7 +14,7 @@ uiController.controller('WebPadController', function($scope, $http){
 	});
 
 	$scope.onKeyDown = function(e){
-		if(e.altKey){
+		if(e.ctrlKey){
 			switch(e.which){
 			case 79:	//o
 				break;
@@ -36,6 +36,8 @@ uiController.controller('WebPadController', function($scope, $http){
 			default:
 				console.log(e.which+' pressed');
 			}
+			e.preventDefault();
+			return false;
 		}
 	};
 });
@@ -50,12 +52,22 @@ uiController.controller('DirTreeController', function($scope, $http){
 		console.log('error: %s', e);
 	});
 
-	$scope.expandRow = function(scope){
-		scope.toggle();
+	$scope.expandRow = function(elm){
+		elm.toggle();
 	};
-	$scope.deleteRow = function(obj){
-		console.log(obj);
+	$scope.deleteRow = function(doc){
+		var url = doc.replace(/\/doc\//, '/txt/');
+		console.log(url);
+		$http.delete(url)
+		.success(function(data){
+			console.log('deleted');
+			window.location.reload();
+		})
+		.error(function(e){
+			console.log('error: %s',e);
+		});
 	};
+	// angular-ui-tree options
 	$scope.options = {
 	};
 });

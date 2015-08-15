@@ -20,6 +20,11 @@ textarea{
 	background-color: black;
 	color: lightgreen;
 }
+a{
+	color: lightgreen;
+	font-weight: normal;
+	text-decoration: none;
+}
 .centered{
 	width: 66%;
 	display: block;
@@ -48,5 +53,7 @@ textarea{
 	overflow: hidden;
 }
 #tree{
+	background-color: black;
+	color: lightgreen;
 	padding: 1em 3em 0;
 }
