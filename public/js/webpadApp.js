@@ -31,13 +31,12 @@ uiController.controller('WebPadController', function($scope, $http){
 					// message
 					console.log('Error: %s', e);
 				});
-				break;
+				e.preventDefault();
+				return false;
 			case 192:	//~
 			default:
 				console.log(e.which+' pressed');
 			}
-			e.preventDefault();
-			return false;
 		}
 	};
 });
