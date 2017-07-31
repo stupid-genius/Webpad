@@ -1,11 +1,11 @@
 module.exports = {
-	public_root: 'http://localhost:3000',
+	public_root: 'http://localhost',
 	crud_host: 'localhost',
-	crud_port: 3000,
+	crud_port: 80,
 	crud_user: 'noteNG-admin',
 	crud_pw: 'correcthorsebatterystaple',
-	crud_c: '/c/webpad/test',
-	crud_r: '/r/webpad/test',
-	crud_u: '/u/webpad/test',
-	crud_d: '/d/webpad/test'
+	crud_c: '/c/webpad/documents',
+	crud_r: '/r/webpad/documents',
+	crud_u: '/u/webpad/documents',
+	crud_d: '/d/webpad/documents'
 };

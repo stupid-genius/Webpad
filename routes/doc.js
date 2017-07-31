@@ -5,7 +5,7 @@ var logger = require('winston');
 
 router.get('/', function(req, res){
 	var context = {
-		host: config.public_root,
+		host: req.protocol+'://'+req.host+(req.port===undefined?'':':'+req.port),
 		page_title: 'WebPad',
 		header_title: 'WebPad',
 		controller: 'WebPadController',
@@ -18,7 +18,7 @@ router.get(/\/(\w+(?:\/\w+)*(?:\/)?)$/, function(req, res){
 	logger.log('debug', req.params[0]);
 
 	var context = {
-		host: config.public_root,
+		host: req.protocol+'://'+req.host+(req.port===undefined?'':':'+req.port),
 		page_title: 'WebPad',
 		header_title: 'WebPad'
 	};
