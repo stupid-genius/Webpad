@@ -18,7 +18,7 @@
     			<li ng-repeat="dir in dir.items" ui-tree-node ng-include="'nodes_renderer.html'"></li>
     		</ol>
     	</script>
-    	<div id="directoryTree">
+    	<div id="directoryTree" class="fullscreen">
             <span ng-if="dirList.length===0">No documents found under this URL.</span>
             <div id="asdfdirectoryTree" ui-tree="options" data-drag-enabled="false" ng-if="dirList.length>0">
         		<ol ui-tree-nodes ng-model="dirList">

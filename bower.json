@@ -5,5 +5,8 @@
     "**/.*",
     "node_modules",
     "components"
-  ]
+  ],
+  "dependencies": {
+    "ace-builds": "1.2.8"
+  }
 }

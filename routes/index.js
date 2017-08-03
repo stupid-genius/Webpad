@@ -7,6 +7,7 @@ router.get('/', function(req, res){
 });
 router.use('/doc', require('./doc'));
 router.use('/txt', require('./txt'));
+router.use('/vim', require('./ace'));
 /* ideas
 router.use('/md');		// markdown
 router.use('/src');		// syntax highlighting
