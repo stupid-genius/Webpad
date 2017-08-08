@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" ng-app="webpadApp">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
-    <title><%= page_title %></title>
+    <title>{{doc_title}}<%= page_title %></title>
     <link rel="stylesheet" href="<%= host %>/css/style.css">
     <link rel="stylesheet" href="<%= host %>/css/jquery-ui.min.css">
     <link rel="stylesheet" href="<%= host %>/css/angular-ui-tree.min.css">
@@ -24,4 +24,4 @@
         });
     </script>
 </head>
-<body ng-app="webpadApp">
+<body>

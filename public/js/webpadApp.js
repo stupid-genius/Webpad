@@ -4,9 +4,11 @@ var webpadApp = angular.module('webpadApp', ['uiController', 'uiServices', 'ui.t
 var uiController = angular.module('uiController', []);
 var uiServices = angular.module('uiServices', []);
 
-uiController.controller('WebPadController', function($scope, DocumentService){
+uiController.controller('WebPadController', function($scope, $rootScope, DocumentService){
 	var path = window.location.pathname.replace(/^\/doc\//, '/txt/');
 	DocumentService.read(path).then(function(data){
+		// $rootScope.doc_title = data.match(/^\s*(.+?)(?=[\r\x0a]{1,2})/)[0]+' - ';
+		$rootScope.doc_title = path.replace(/^\/[^\/]+/, '') + ' - ';
 		$scope.wpDoc = data;
 		$scope.$apply();
 	}, function(e){
@@ -66,7 +68,7 @@ uiController.controller('DirTreeController', function($scope, DocumentService){
 	};
 });
 
-uiController.controller('AceEditorController', function(DocumentService){
+uiController.controller('AceEditorController', function($rootScope, DocumentService){
 	var editor = ace.edit('aceEditor');
 	editor.setTheme('ace/theme/gob');
 	editor.setKeyboardHandler('ace/keyboard/vim');
@@ -75,6 +77,9 @@ uiController.controller('AceEditorController', function(DocumentService){
 	var path = window.location.pathname.replace(/^\/vim\//, '/txt/');
 	DocumentService.read(path).then(function(data){
 		editor.setValue(data);
+		// $rootScope.doc_title = data.match(/^\s*(.+?)(?=[\r\x0a]{1,2})/)[0]+' - ';
+		$rootScope.doc_title = path.replace(/^\/[^\/]+/, '') + ' - ';
+		$rootScope.$apply();
 	}, function(e){
 		console.error(e);
 	});
