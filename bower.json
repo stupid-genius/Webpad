@@ -7,6 +7,7 @@
     "components"
   ],
   "dependencies": {
-    "ace-builds": "1.2.8"
+    "ace-builds": "1.2.8",
+    "angular-ui-tinymce": "^0.0.19"
   }
 }

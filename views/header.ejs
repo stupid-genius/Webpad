@@ -13,12 +13,13 @@
     <script type="text/javascript" src="<%= host %>/js/webpadApp.js"></script>
     <script type="text/javascript" src="<%= host %>/components/ace-builds/src-min/ace.js"></script>
     <script type="text/javascript" src="<%= host %>/components/ace-builds/src-min/ext-beautify.js"></script>
+    <script type="text/javascript" src="<%= host %>/components/tinymce/tinymce.js"></script>
+    <script type="text/javascript" src="<%= host %>/components/angular-ui-tinymce/src/tinymce.js"></script>
   <% if (ENV_DEVELOPMENT) { %>
     <script src="http://localhost:35729/livereload.js"></script>
   <% } %>
     <script type="text/javascript">
-        $('document').ready(function()
-        {
+        $(document).ready(function(){
             $('<%= initElem %>').height($(window).height()-$('#header').height());
             $('<%= initElem %>').width($(window).width());
         });

@@ -8,18 +8,18 @@ router.get('/', function(req, res){
 		host: req.protocol+'://'+req.host+(req.port===undefined?'':':'+req.port),
 		page_title: 'WebPad',
 		header_title: 'WebPad',
-		controller: 'AceEditorController',
-		initElem: '#aceEditor'
+		controller: 'TinyMCEController',
+		initElem: '#tinymceEditor'
 	};
-	res.render('ace', context);
+	res.render('tiny', context);
 });
 router.get(/\/(\w+(?:\/\w+)*(?:\/)?)$/, function(req, res){
 	var context = {
 		host: req.protocol+'://'+req.host+(req.port===undefined?'':':'+req.port),
 		page_title: 'WebPad',
 		header_title: 'WebPad',
-		controller: 'AceEditorController',
-		initElem: '#aceEditor',
+		controller: 'TinyMCEController',
+		initElem: '#tinymceEditor'
 	};
 	var path = req.params[0];
 	if(path.match(/\/$/)){
@@ -29,7 +29,7 @@ router.get(/\/(\w+(?:\/\w+)*(?:\/)?)$/, function(req, res){
 		res.render('index', context);
 	}
 	else{
-		res.render('ace', context);
+		res.render('tiny', context);
 	}
 });
 

@@ -1,0 +1,12 @@
+<% include header %>
+
+    <div id="header">
+        <h2><%= header_title %></h2>
+    </div>
+	<div id="tinymceEditor" ng-controller="<%= controller %>">
+		<form action="#" ng-submit="onsubmit()">
+			<textarea ui-tinymce="tinymceConfig" ng-model="tinymceModel"></textarea>
+		</form>
+	</div>
+
+<% include footer %>

@@ -1,11 +1,11 @@
 'use strict';
-var webpadApp = angular.module('webpadApp', ['uiController', 'uiServices', 'ui.tree']);
+var webpadApp = angular.module('webpadApp', ['uiController', 'uiServices', 'ui.tree', 'ui.tinymce']);
 
 var uiController = angular.module('uiController', []);
 var uiServices = angular.module('uiServices', []);
 
 uiController.controller('WebPadController', function($scope, $rootScope, DocumentService){
-	var path = window.location.pathname.replace(/^\/doc\//, '/txt/');
+	var path = window.location.pathname.replace(/^\/edit\//, '/txt/');
 	DocumentService.read(path).then(function(data){
 		// $rootScope.doc_title = data.match(/^\s*(.+?)(?=[\r\x0a]{1,2})/)[0]+' - ';
 		$rootScope.doc_title = path.replace(/^\/[^\/]+/, '') + ' - ';
@@ -21,10 +21,7 @@ uiController.controller('WebPadController', function($scope, $rootScope, Documen
 			case 79:	//o
 				break;
 			case 83:	//s
-				var postDoc = {
-					doc:$scope.wpDoc
-				};
-				DocumentService.update(path, postDoc).then(function(){
+				DocumentService.update(path, $scope.wpDoc).then(function(){
 					// message
 					console.log('Document saved');
 				}, function(e){
@@ -54,7 +51,7 @@ uiController.controller('DirTreeController', function($scope, DocumentService){
 		elm.toggle();
 	};
 	$scope.deleteRow = function(doc){
-		var url = doc.replace(/\/doc\//, '/txt/');
+		var url = doc.replace(/\/edit\//, '/txt/');
 		console.log(url);
 		DocumentService.delete(url).then(function(data){
 			console.log('deleted');
@@ -94,10 +91,7 @@ uiController.controller('AceEditorController', function($rootScope, DocumentServ
 			if(input.args){
 				newPath = '/txt/'+input.args;
 			}
-			var postDoc = {
-				doc: editor.getValue()
-			};
-			DocumentService.update(newPath, postDoc).then(function(){
+			DocumentService.update(newPath, editor.getValue()).then(function(){
 				vimNotify(cm, 'saved');
 			}, function(e){
 				vimNotify(cm, 'Error: '+e);
@@ -119,6 +113,53 @@ uiController.controller('AceEditorController', function($rootScope, DocumentServ
 	});
 });
 
+uiController.controller('TinyMCEController', function($scope, $rootScope, DocumentService){
+	var tinymceEditor;
+	$scope.tinymceConfig = {
+		skin: 'lightgray',
+		theme : 'modern',
+		init_instance_callback: function(editor){
+			tinymceEditor = editor;
+			editor.theme.resizeTo(undefined, $('#tinymceEditor').height()-108);
+			// editor.execCommand('mceFullScreen');
+
+			var path = window.location.pathname.replace(/^\/doc\//, '/txt/');
+			DocumentService.read(path).then(function(doc){
+				if(doc!==undefined){
+					editor.setContent(doc);
+					$rootScope.doc_title = path.replace(/^\/[^\/]+/, '') + ' - ';
+					$rootScope.$apply();
+				}
+			});
+		},
+		setup: function(editor){
+			editor.on('BeforeSetContent', function(contentEvent){
+				contentEvent.content = contentEvent.content.replace(/\r?\n/g, '<br />');
+			});
+		},
+		plugins: [
+			'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+			'searchreplace wordcount visualblocks visualchars code fullscreen',
+			'insertdatetime media nonbreaking save table contextmenu directionality',
+			'emoticons template paste textcolor colorpicker textpattern imagetools codesample toc'	//help
+		],
+		toolbar1: 'save | undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media | forecolor backcolor emoticons | codesample help',
+		// toolbar2: '',
+		save_enablewhendirty: false,
+		save_onsavecallback: function(){
+			var path = window.location.pathname.replace(/^\/doc\//, '/txt/');
+			DocumentService.update(path, tinymceEditor.getContent()).then(function(){
+				console.log('saved');
+			}, function(msg){
+				console.error(JSON.stringify(msg));
+			});
+		}
+	};
+	$scope.onsubmit = function(){
+		console.log('submit form');
+	};
+});
+
 uiServices.service('DocumentService', function($http){
 	this.create = function(){
 
@@ -135,8 +176,11 @@ uiServices.service('DocumentService', function($http){
 		});
 	};
 	this.update = function(path, doc){
+		var postDoc = {
+			doc: doc
+		};
 		return new Promise(function(resolve, reject){
-			$http.post(path, doc)
+			$http.post(path, postDoc)
 			.success(function(data){
 				resolve(data);
 			})
