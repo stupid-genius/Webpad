@@ -8,6 +8,7 @@
   ],
   "dependencies": {
     "ace-builds": "1.2.8",
-    "angular-ui-tinymce": "^0.0.19"
+    "angular-ui-tinymce": "^0.0.19",
+    "handsontable": "https://github.com/handsontable/handsontable.git#0.31.2"
   }
 }

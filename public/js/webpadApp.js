@@ -51,7 +51,7 @@ uiController.controller('DirTreeController', function($scope, DocumentService){
 		elm.toggle();
 	};
 	$scope.deleteRow = function(doc){
-		var url = doc.replace(/\/edit\//, '/txt/');
+		var url = doc.replace(/\/(?:edit|vim|doc)\//, '/txt/');
 		console.log(url);
 		DocumentService.delete(url).then(function(data){
 			console.log('deleted');
@@ -134,7 +134,7 @@ uiController.controller('TinyMCEController', function($scope, $rootScope, Docume
 		},
 		setup: function(editor){
 			editor.on('BeforeSetContent', function(contentEvent){
-				contentEvent.content = contentEvent.content.replace(/\r?\n/g, '<br />');
+				// contentEvent.content = contentEvent.content.replace(/\r?\n/g, '<br />');
 			});
 		},
 		plugins: [
@@ -145,6 +145,7 @@ uiController.controller('TinyMCEController', function($scope, $rootScope, Docume
 		],
 		toolbar1: 'save | undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media | forecolor backcolor emoticons | codesample help',
 		// toolbar2: '',
+		entity_encoding: 'raw',
 		save_enablewhendirty: false,
 		save_onsavecallback: function(){
 			var path = window.location.pathname.replace(/^\/doc\//, '/txt/');
@@ -159,6 +160,68 @@ uiController.controller('TinyMCEController', function($scope, $rootScope, Docume
 		console.log('submit form');
 	};
 });
+
+uiController.controller('HotTableController', function($scope, $rootScope, HotDataSourceFactory){
+	var path = window.location.pathname.replace(/^\/hot\//, '/txt/');
+	var table = $('#hotTable')[0];
+	var hotTable = new Handsontable(table, {
+		stretchH: 'all',
+		width: '100%',
+		rowHeaders: true,
+		colHeaders: true,
+		columnSorting: true,
+		sortIndicator: true
+	});
+	var dataSource = HotDataSourceFactory.get(hotTable, path);
+	dataSource.read();
+	hotTable.addHook('afterChange', function(){
+		dataSource.save();
+	});
+	$rootScope.doc_title = path.replace(/^\/[^\/]+/, '') + ' - ';
+	// $scope.$apply();
+});
+uiController.factory('HotDataSourceFactory', ['DocumentService', function(docService){
+	this.get = function(hotTable, path){
+		var dataStore = [];
+		var dataSource = {};
+		Object.defineProperties(dataSource, {
+			data: {
+				get: function(){
+					return dataStore;
+				}
+			},
+			read: {
+				value: function(){
+					docService.read(path).then(function(data){
+						dataStore = data.split(/[\r\n]+/).map(function(row){
+							return row.split(/,/);
+						});
+						hotTable.loadData(dataStore);
+						hotTable.render();
+					});
+				}
+			},
+			save: {
+				value: function(){
+					var csvDataStore = dataStore.map(function(row){
+						return row.join(',');
+					}).join('\n');
+					return docService.update(path, csvDataStore).then(function(){
+						console.log('hot saved');
+					});
+				}
+			},
+			delete: {
+				value: function(){
+					return docService.delete(path).then(function(){
+					});
+				}
+			}
+		});
+		return dataSource;
+	};
+	return this;
+}]);
 
 uiServices.service('DocumentService', function($http){
 	this.create = function(){
