@@ -1,0 +1,3 @@
+[submodule "MongoCRUD"]
+	path = MongoCRUD
+	url = git@github.com:stupid-genius/MongoCRUD.git

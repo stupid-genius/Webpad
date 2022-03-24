@@ -1,0 +1,80 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+html, body{
+	height: 100%;
+	overflow: hidden;
+}
+body{
+	background-color: white;
+	font-family: Trebuchet MS,Tahoma,Verdana,Arial,sans-serif;
+	font-size: small;
+}
+input{
+	vertical-align: middle;
+}
+textarea{
+	font-family: Monaco, Menlo, 'Ubuntu Mono', Consolas, source-code-pro, monospace;
+	font-size: 14px;
+	background-color: #0A110A;
+	color: lightgreen;
+}
+a{
+	color: lightgreen;
+	font-weight: normal;
+	text-decoration: none;
+}
+.centered{
+	width: 66%;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+.fullscreen{
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+.ui-icon.ui-icon-plus,
+.ui-icon.ui-icon-minus,
+.ui-icon.ui-icon-trash{
+	display:inline-block;
+}
+.hidden{
+	display:none!important;
+	visibility:hidden!important;
+}
+#header{
+	background-color: #e0e0e0;
+	padding: 0 2em 0;
+}
+#main{
+	background-color: #0A110A;
+	min-height: 100%;
+	overflow: hidden;
+}
+#tree{
+	background-color: #0A110A;
+	color: lightgreen;
+	padding: 1em 3em 0;
+}
+#asdfdirectoryTree{
+	padding-bottom: 2em;
+}
+#aceEditor{
+	position: absolute;
+	top: 22px;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	font-size: 14px;
+	color: lightgreen;
+    background-color: #0A110A;
+}
+#taEdit{
+	min-height: 100%;
+	overflow: hidden;
+}
+#hotTable{
+	background: white;
+}

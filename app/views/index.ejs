@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html lang="en" ng-app="webpadApp">
+	<head>
+		<meta charset="UTF-8">
+		<title>{{page_title}} - <%- page_title %></title>
+		<% include bundle %>
+		<script type="text/javascript">
+			function resize(event){
+				const initElem = document.getElementById('<%= initElem %>');
+				const header = document.getElementById('header');
+				initElem.style.height = window.innerHeight - header.offsetHeight;
+				initElem.style.width = window.innerWidth;
+			}
+			window.onload = resize;
+			window.onresize = resize;
+		</script>
+	</head>
+	<body>
+		<section id="header">
+			<% include header %>
+		</section>
+
+		<section id="main">
+			<%- include(template) %>
+		</section>
+	</body>
+</html>
+
